@@ -3,15 +3,35 @@
 {% block title %}Список товаров{% endblock %}
 
 {% block content %}
-    <h1>Список продуктов</h1>
-    {% for product in products %}
-        <div>
-            <h2>{{ product.name }}</h2>
-            <p>Цена: {{ product.price }} ₽</p>
-            <p>Продавец: {{ product.seller.username }}</p>
-            <p>Описание: {{ product.description }}</p>
-        </div>
-    {% empty %}
-        <p>Товаров нет</p>
-    {% endfor %}
+<h1>Список продуктов</h1>
+<div id="product-list">
+    Загружаем товары...
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/products/')
+        .then(response => response.json())
+        .then(products => {
+            const container = document.getElementById('product-list');
+            container.innerHTML = '';
+
+            products.forEach(product => {
+                container.innerHTML += `
+                    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                        <h3>${product.name}</h3>
+                        <p>Цена: ${product.price} ₽</p>
+                        <p>Продавец: ${product.seller.username}</p>
+                        <p>Категория: ${product.category}</p>
+                        <p>Статус: ${product.status}</p>
+                    </div>
+                `;
+            });
+        })
+        .catch(error => {
+            document.getElementById('product-list').innerText = 'Ошибка загрузки товаров';
+            console.error('Ошибка:', error);
+        });
+});
+</script>
 {% endblock %}

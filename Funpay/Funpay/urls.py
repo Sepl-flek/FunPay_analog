@@ -18,14 +18,14 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from Product.views import ProductViewSet, product_list
+from Product.views import ProductViewSet, product_page
 
 router = SimpleRouter()
-router.register('products-api', ProductViewSet)
+router.register(r'api/products', ProductViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('products/', product_list, name='product_list'),
+    path('products/', product_page, name='product_page'),
 ]
 
 urlpatterns += router.urls

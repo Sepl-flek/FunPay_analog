@@ -11,6 +11,5 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
 
 
-def product_list(request):
-    products = Product.objects.select_related('seller').all()
-    return render(request, 'products.html', {'products': products})
+def product_page(request):
+    return render(request, 'products.html')

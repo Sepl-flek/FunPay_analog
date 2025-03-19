@@ -16,7 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.routers import SimpleRouter
+
+from Product.views import ProductViewSet, product_list
+
+router = SimpleRouter()
+router.register('products-api', ProductViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('products/', product_list, name='product_list'),
 ]
+
+urlpatterns += router.urls

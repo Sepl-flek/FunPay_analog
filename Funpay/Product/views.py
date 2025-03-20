@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from rest_framework.mixins import UpdateModelMixin
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from Product.models import Product
 from Product.permission import IsOwnerOrReadOnly

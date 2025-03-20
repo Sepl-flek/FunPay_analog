@@ -23,3 +23,7 @@ class UserProductRelation(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey('Product.Product', on_delete=models.CASCADE)
     in_bookmark = models.BooleanField(default=False)
+
+
+class UserProductsBought(models.Model):
+    pass

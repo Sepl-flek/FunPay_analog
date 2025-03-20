@@ -14,5 +14,5 @@ class UserSerializer(ModelSerializer):
 
 class UserProductRelationSerializer(ModelSerializer):
     class Meta:
-        Model = UserProductRelation
+        model = UserProductRelation
         fields = ('product', 'in_bookmark')

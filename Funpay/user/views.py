@@ -15,6 +15,6 @@ class UserProductRelationViewSet(UpdateModelMixin, GenericViewSet):
 
     def get_object(self):
         obj, created = UserProductRelation.objects.get_or_create(user=self.request.user,
-                                                              product_id=self.kwargs['product'])
+                                                                 product_id=self.kwargs['product'])
 
         return obj

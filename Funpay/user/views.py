@@ -1,10 +1,11 @@
+from django.db.models import When
 from django.shortcuts import render
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from user.models import UserProductRelation
-from user.serializers import UserProductRelationSerializer
+from user.models import UserProductRelation, CustomUser
+from user.serializers import UserProductRelationSerializer, ProfileSerializer
 
 
 class UserProductRelationViewSet(UpdateModelMixin, GenericViewSet):
@@ -18,3 +19,18 @@ class UserProductRelationViewSet(UpdateModelMixin, GenericViewSet):
                                                                  product_id=self.kwargs['product'])
 
         return obj
+
+
+class MyUserProfileViewSet(ModelViewSet):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.none()
+    def get_queryset(self):
+        return CustomUser.objects.filter(id=self.request.user.id).prefetch_related('products')
+
+    def get_object(self):
+        return self.request.user
+
+
+def auth(request):
+    return render(request, 'auth.html')

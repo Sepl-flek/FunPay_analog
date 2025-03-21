@@ -29,3 +29,5 @@ class ProductRelationApiTestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         relation = UserProductRelation.objects.get(user=self.user1, product=self.product1)
         self.assertTrue(relation.in_bookmark)
+
+

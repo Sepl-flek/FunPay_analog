@@ -6,8 +6,8 @@ from user.serializers import UserSerializer
 
 
 class ProductSerializer(ModelSerializer):
-
     seller = UserSerializer(read_only=True)
+
     class Meta:
         model = Product
         fields = ('name', 'price', 'category', 'status', 'count', 'seller',)

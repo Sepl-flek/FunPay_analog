@@ -4,34 +4,64 @@
 
 {% block content %}
 <h1>Список продуктов</h1>
-<div id="product-list">
-    Загружаем товары...
-</div>
+
+<!-- Форма поиска -->
+<form id="search-form">
+    <input type="text" id="search-input" placeholder="Введите название товара">
+    <button type="submit">Поиск</button>
+</form>
+
+<!-- Сюда выводятся товары -->
+<div id="product-list">Загружаем товары...</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/products/')
-        .then(response => response.json())
-        .then(products => {
-            const container = document.getElementById('product-list');
-            container.innerHTML = '';
+    const container = document.getElementById('product-list');
+    const form = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
 
-            products.forEach(product => {
-                container.innerHTML += `
-                    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                        <h3>${product.name}</h3>
-                        <p>Цена: ${product.price} ₽</p>
-                        <p>Продавец: ${product.seller.username}</p>
-                        <p>Категория: ${product.category}</p>
-                        <p>Статус: ${product.status}</p>
-                    </div>
-                `;
+    // Функция загрузки товаров с поиском
+    function loadProducts(query = '') {
+        let url = '/api/products/';
+        if (query) {
+            url += `?search=${encodeURIComponent(query)}`;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(products => {
+                container.innerHTML = '';
+                if (products.length === 0) {
+                    container.innerHTML = 'Ничего не найдено';
+                } else {
+                    products.forEach(product => {
+                        container.innerHTML += `
+                            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                                <h3>${product.name}</h3>
+                                <p>Цена: ${product.price} ₽</p>
+                                <p>Продавец: ${product.seller.username}</p>
+                                <p>Категория: ${product.category}</p>
+                                <p>Статус: ${product.status}</p>
+                            </div>
+                        `;
+                    });
+                }
+            })
+            .catch(error => {
+                container.innerText = 'Ошибка загрузки товаров';
+                console.error('Ошибка:', error);
             });
-        })
-        .catch(error => {
-            document.getElementById('product-list').innerText = 'Ошибка загрузки товаров';
-            console.error('Ошибка:', error);
-        });
+    }
+
+    // Первая загрузка всех товаров
+    loadProducts();
+
+    // Поиск по форме
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = searchInput.value.trim();
+        loadProducts(query);
+    });
 });
 </script>
 {% endblock %}

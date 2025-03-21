@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-2gc^%cp)*#aizxv^xrkt_w)^m8$8ort1=pcg98ry-i-weo$jak
 DEBUG = True
 
 ALLOWED_HOSTS = []
+LOGIN_URL = '/user/login/'
 
 
 # Application definition
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'social_django',
+    'django_filters',
 
     'Product',
     'user',

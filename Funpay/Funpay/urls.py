@@ -30,7 +30,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', product_page, name='product_page'),
     re_path('', include('social_django.urls', namespace='social')),
-    path('authentication/', auth),
     path('user/', include('user.urls')),
 ]
 

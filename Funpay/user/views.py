@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import When
 from django.shortcuts import render
 from rest_framework.mixins import UpdateModelMixin
@@ -25,11 +26,17 @@ class MyUserProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.none()
+
     def get_queryset(self):
         return CustomUser.objects.filter(id=self.request.user.id).prefetch_related('products')
 
     def get_object(self):
         return self.request.user
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'profile.html')
 
 
 def auth(request):

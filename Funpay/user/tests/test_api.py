@@ -31,3 +31,11 @@ class ProductRelationApiTestCase(APITestCase):
         self.assertTrue(relation.in_bookmark)
 
 
+    def test_user_profile(self):
+        url = reverse('customuser-list')
+
+        self.client.force_login(self.user2)
+        response = self.client.get(url)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(1, len(response.data))
+        self.assertEqual('test2', response.data[0]['username'])

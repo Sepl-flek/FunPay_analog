@@ -1,0 +1,58 @@
+{% extends 'base.html' %}  <!-- Наследуем базовый шаблон -->
+
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+<h1>Профиль пользователя</h1>
+
+<!-- Контейнер для данных профиля -->
+<div id="profile-info">
+    Загрузка профиля...
+</div>
+
+<!-- JS-скрипт для подгрузки профиля из API -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/profile/', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('access_token')  // Если у тебя авторизация по JWT
+        }
+    })
+    .then(response => response.json())
+    .then(profiles => {
+        const container = document.getElementById('profile-info');
+        container.innerHTML = '';
+
+        // Так как ты возвращаешь список, берём первый профиль
+        const user = profiles[0];
+
+        container.innerHTML = `
+            <p><strong>Логин:</strong> ${user.username}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Баланс:</strong> ${user.balance} ₽</p>
+            <h2>Ваши товары</h2>
+        `;
+
+        if (user.products.length > 0) {
+            user.products.forEach(product => {
+                container.innerHTML += `
+                    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px;">
+                        <h3>${product.name}</h3>
+                        <p>Цена: ${product.price} ₽</p>
+                        <p>Категория: ${product.category}</p>
+                        <p>Статус: ${product.status}</p>
+                        <p>Количество: ${product.count}</p>
+                    </div>
+                `;
+            });
+        } else {
+            container.innerHTML += `<p>У вас пока нет товаров.</p>`;
+        }
+    })
+    .catch(error => {
+        document.getElementById('profile-info').innerText = 'Ошибка загрузки профиля';
+        console.error('Ошибка загрузки:', error);
+    });
+});
+</script>
+{% endblock %}

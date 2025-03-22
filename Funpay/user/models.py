@@ -20,9 +20,18 @@ class CustomUser(AbstractUser):
 
 
 class UserProductRelation(models.Model):
+
+    RATING_CHOICE = (
+        (1, 'Bad'),
+        (2, 'Nice'),
+        (3, 'Good'),
+        (4, 'Amazing'),
+        (5, 'Insane'),
+    )
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey('Product.Product', on_delete=models.CASCADE)
     in_bookmark = models.BooleanField(default=False)
+    rating = models.SmallIntegerField(choices=RATING_CHOICE, null=True)
 
 
 class UserProductsBought(models.Model):

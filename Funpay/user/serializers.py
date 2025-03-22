@@ -30,4 +30,4 @@ class ProfileSerializer(ModelSerializer):
 class UserProductRelationSerializer(ModelSerializer):
     class Meta:
         model = UserProductRelation
-        fields = ('product', 'in_bookmark')
+        fields = ('product', 'in_bookmark', 'rating')

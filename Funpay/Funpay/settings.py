@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'Product',
     'user',
 ]
+
 AUTH_USER_MODEL = 'user.CustomUser'
 
 MIDDLEWARE = [
@@ -136,6 +137,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/user/profile/'
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',

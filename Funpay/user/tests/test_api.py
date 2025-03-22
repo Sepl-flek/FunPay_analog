@@ -30,6 +30,17 @@ class ProductRelationApiTestCase(APITestCase):
         relation = UserProductRelation.objects.get(user=self.user1, product=self.product1)
         self.assertTrue(relation.in_bookmark)
 
+    def test_rating(self):
+        url = reverse('userproductrelation-detail', args=(self.product1.pk,))
+        data = {
+            'rating': 4
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user1)
+        response = self.client.patch(url, data=json_data, content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        relation = UserProductRelation.objects.get(user=self.user1, product=self.product1)
+        self.assertEqual(4, relation.rating)
 
     def test_user_profile(self):
         url = reverse('customuser-list')

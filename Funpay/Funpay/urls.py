@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from rest_framework.routers import SimpleRouter
 
-from Product.views import ProductViewSet, product_page
+from Product.views import ProductViewSet, product_page, information_about_product
 from user.views import UserProductRelationViewSet, auth, MyUserProfileViewSet
 
 router = SimpleRouter()
@@ -29,6 +29,7 @@ router.register(r'api/profile', MyUserProfileViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', product_page, name='product_page'),
+    path('products/<int:pk>/', information_about_product, name='product_detail'),
     re_path('', include('social_django.urls', namespace='social')),
     path('user/', include('user.urls')),
 ]

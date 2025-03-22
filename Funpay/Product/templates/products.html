@@ -5,9 +5,21 @@
 {% block content %}
 <h1>Список продуктов</h1>
 
-<!-- Форма поиска -->
+<!-- Форма поиска и сортировки -->
 <form id="search-form">
     <input type="text" id="search-input" placeholder="Введите название товара">
+
+    <!-- Новый select для сортировки -->
+    <select id="sort-select">
+        <option value="">Без сортировки</option>
+        <option value="name">По названию (A-Z)</option>
+        <option value="-name">По названию (Z-A)</option>
+        <option value="price">По цене (возрастание)</option>
+        <option value="-price">По цене (убывание)</option>
+        <option value="count">По количеству (возрастание)</option>
+        <option value="-count">По количеству (убывание)</option>
+    </select>
+
     <button type="submit">Поиск</button>
 </form>
 
@@ -19,12 +31,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('product-list');
     const form = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
+    const sortSelect = document.getElementById('sort-select');
 
-    // Функция загрузки товаров с поиском
-    function loadProducts(query = '') {
+    // Функция загрузки товаров с поиском и сортировкой
+    function loadProducts(query = '', ordering = '') {
         let url = '/api/products/';
-        if (query) {
-            url += `?search=${encodeURIComponent(query)}`;
+        const params = [];
+
+        if (query) params.push(`search=${encodeURIComponent(query)}`);
+        if (ordering) params.push(`ordering=${encodeURIComponent(ordering)}`);
+
+        if (params.length > 0) {
+            url += '?' + params.join('&');
         }
 
         fetch(url)
@@ -37,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     products.forEach(product => {
                         container.innerHTML += `
                             <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                                <h3>${product.name}</h3>
+                                <h3><a href='/products/${product.id}'>${product.name} </a></h3>
                                 <p>Цена: ${product.price} ₽</p>
                                 <p>Продавец: ${product.seller.username}</p>
                                 <p>Категория: ${product.category}</p>
@@ -56,11 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Первая загрузка всех товаров
     loadProducts();
 
-    // Поиск по форме
+    // Поиск и сортировка по форме
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         const query = searchInput.value.trim();
-        loadProducts(query);
+        const ordering = sortSelect.value;
+        loadProducts(query, ordering);
     });
 });
 </script>

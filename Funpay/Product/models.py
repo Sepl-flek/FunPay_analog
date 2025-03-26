@@ -20,7 +20,7 @@ class Product(models.Model):
 
     seller = models.ForeignKey('user.CustomUser', on_delete=models.CASCADE, related_name='products', verbose_name="Продавец")
     name = models.CharField(max_length=255, verbose_name='Название товара')
-    description = models.TextField (blank=True, default='', verbose_name='Описание товара')
+    description = models.TextField(blank=True, default='', verbose_name='Описание товара')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
     category = models.CharField(max_length=15, choices=CATEGORY_CHOICES, verbose_name='Категория')
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, default='active', verbose_name='Статус')
